@@ -64,7 +64,7 @@ public class MainFrame extends javax.swing.JFrame {
 		if(debug) {
 			messagenetURL = "http://localhost/~enrico/MessagenetApiTester/backend.php";
 		} else {
-			messagenetURL = "https://www.messagenet.it/api/";
+			messagenetURL = "https://www.messagenet.com/api/";
 		}
 		
 		prefs = Preferences.userNodeForPackage(MainFrame.class);
