@@ -526,7 +526,7 @@ public class MainFrame extends javax.swing.JFrame {
 				CSVReader reader = new CSVReader(new FileReader(fc.getSelectedFile()), ';');
 				String [] nextLine;
 				while ((nextLine = reader.readNext()) != null) {
-					if(nextLine.length == 2) {
+					if(nextLine.length == 2 && !nextLine[0].trim().isEmpty()) {
 						JTBsmslistModel.addRow(new String[] { "-", nextLine[0], nextLine[1]});
 						float size = nextLine[1].length();
 						double smsCount = Math.ceil(size / 160.0);
