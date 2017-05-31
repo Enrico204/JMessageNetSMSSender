@@ -1,0 +1,9 @@
+language: java
+script: ant jar
+before_install: git clone https://github.com/Enrico204/JMessageNetLib _lib && pushd _lib && ant jar && cp dist/*.jar ../lib/ && popd
+deploy:
+  provider: releases
+  file: dist/JMessageNetSMSSender.jar
+  skip_cleanup: true
+  on:
+    tags: true
