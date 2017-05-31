@@ -1,12 +1,12 @@
 
-package jmessagenetsmssender;
+package it.netsplit.jmessagenetsmssender;
 
 import au.com.bytecode.opencsv.CSVReader;
-import it.enricobassetti.JMessageNetLib.NoCreditException;
-import it.enricobassetti.JMessageNetLib.SMSAPI;
-import it.enricobassetti.JMessageNetLib.SMSSendInfo;
-import it.enricobassetti.JMessageNetLib.TextLimitExcedeed;
-import it.enricobassetti.JMessageNetLib.UnauthorizedException;
+import it.netsplit.jmessagenetlib.NoCreditException;
+import it.netsplit.jmessagenetlib.SMSAPI;
+import it.netsplit.jmessagenetlib.SMSSendInfo;
+import it.netsplit.jmessagenetlib.TextLimitExcedeed;
+import it.netsplit.jmessagenetlib.UnauthorizedException;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.FileNotFoundException;
@@ -42,15 +42,16 @@ public class MainFrame extends javax.swing.JFrame {
 		
 	}
 	
-	private Preferences prefs;
+	private final Preferences prefs;
 	private String username;
 	private String password;
-	private DefaultListModel JLSnumbersModel = new DefaultListModel();
-	private SMSTableModel JTBsmslistModel = new SMSTableModel();
+	private final DefaultListModel JLSnumbersModel = new DefaultListModel();
+	private final SMSTableModel JTBsmslistModel = new SMSTableModel();
 	private final String messagenetURL;
 
 	/**
 	 * Creates new form MainFrame
+	 * @param debug
 	 */
 	public MainFrame(boolean debug) {
 		initComponents();
@@ -227,7 +228,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(JBTadd)
                     .addComponent(JLBmsglength))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -321,7 +322,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JLBSMSCost)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(JPBBulkSMS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,7 +365,7 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JLBcredit)
                 .addContainerGap())
@@ -416,9 +417,7 @@ public class MainFrame extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Testo troppo lungo in invio", JOptionPane.ERROR_MESSAGE);
 			} catch(UnauthorizedException e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Errore autenticazione", JOptionPane.ERROR_MESSAGE);
-			} catch(UnsupportedEncodingException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage(), "Errore librerie parsing", JOptionPane.ERROR_MESSAGE);
-			} catch(ParseException e) {
+			} catch(UnsupportedEncodingException | ParseException e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Errore librerie parsing", JOptionPane.ERROR_MESSAGE);
 			} catch(IOException e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Errore durante l'invio", JOptionPane.ERROR_MESSAGE);
@@ -474,7 +473,7 @@ public class MainFrame extends javax.swing.JFrame {
 								// Invio riuscito
 								statusMsg = "OK";
 							} else {
-								statusMsg = "Errore: " + inf.statusMessage;
+								statusMsg = "Errore interno";
 							}
 						} catch(NoCreditException e) {
 							statusMsg = "Errore: Credito residuo insufficiente";
@@ -484,9 +483,7 @@ public class MainFrame extends javax.swing.JFrame {
 							statusMsg = "Errore: Errore autenticazione";
 						} catch(UnsupportedEncodingException e) {
 							statusMsg = "Errore: Errore interno";
-						} catch(ParseException e) {
-							statusMsg = "Errore: Errore interno";
-						} catch(IOException e) {
+						} catch(ParseException | IOException e) {
 							statusMsg = "Errore: Errore interno";
 						}
 						JTBsmslistModel.setValueAt(statusMsg, i, 0);
@@ -536,7 +533,11 @@ public class MainFrame extends javax.swing.JFrame {
 			} catch(FileNotFoundException e) {
 				JOptionPane.showMessageDialog(this, "File non trovato", "File non trovato", JOptionPane.ERROR_MESSAGE);
 			} catch(IOException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage(), "Errore durante la lettura del file", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(
+						this,
+						"Errore lettura file", "Errore durante la lettura del file: " + e.getLocalizedMessage(),
+						JOptionPane.ERROR_MESSAGE
+				);
 			}
 			
 		}
@@ -574,6 +575,7 @@ public class MainFrame extends javax.swing.JFrame {
 		
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				boolean debug = false;
 				if(args.length > 0 && args[0].equals("-d")) {

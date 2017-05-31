@@ -1,5 +1,5 @@
 
-package jmessagenetsmssender;
+package it.netsplit.jmessagenetsmssender;
 
 /**
  *

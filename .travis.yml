@@ -1,12 +1,15 @@
 language: java
-script: ant jar
-before_install: git clone https://github.com/Enrico204/JMessageNetLib _lib && pushd
-  _lib && ant jar && cp dist/*.jar ../lib/ && popd
+before_install:
+- git clone https://github.com/Enrico204/JMessageNetLib _lib && pushd _lib && mvn
+  install && popd
+before_deploy:
+- export RELEASE_PKG_FILE=$(ls target/JMessageNetSMSSender*jar-with-dependencies.jar)
 deploy:
   provider: releases
-  file: dist/JMessageNetSMSSender.jar
   skip_cleanup: true
+  file_glob: true
+  file: "${RELEASE_PKG_FILE}"
   on:
     tags: true
   api-key:
-    secure: SzH164QdEz4QNf6adcLEEJA4pObNB3Zt0/vRs9e60Ds0DlKfUclMYm6n2sRrkG2CFarMSANQbBwB20Du6vhlE0rjUklzlD/F0FVW7V12hjkxxZJGvE6l4T1UhenCJspuIKU0KnaE+DGMvjCzjdcq7lNqSDUUyKSZI9YBh+Bxhg0bxgg0H0Zolt4PqMwP88D7tbL0J0YnzZ3Kin1xicx8FRi3XYW4RIyjmS3+i6g6SPwQp51I79d+1vV5yp9O5gMeyZ1pYwfw3PUF+RLkvf+QC0CJgrJytbtJrUS1jcymYoEK2r3EmQiSC9z8O+SXpWNq6dHsegp9XeGst+gxu3ERClzh+pZqu/t6eN4QfCsF7zGRxmZjccInZ8RyiUbho5OdNAWp2ZCjgE0/d80NdCt5VMcFpy5IzFe+cECcuvIOJfS7Gvi3RW9ZWdrPFEFQZAtKJf8gZPzcWy6EWxeyhaQEfX+W0WBRqGhTBJasewY1yN9HxtvQchtrKFB1W9E5sNsAlKd5CM9T5CkJPuwUpflfoqDjk1I7QwLVqFxke3YYiMxS+tzRYUDbJ7teiYKeFLji+2gWo0VZKK8xZrtNMg/dgUuqz4hhaxaQCixkcdzsbdAAEC6vAE0ICNKaGJFrTAlLPRXJT2v4A5BtJQIOTJisin/rv7Q9QuUXPQiCxo4fquU=
+    secure: vCBE+vHIhLDrwpqvDxABpo4zI/iApF2auVkPcFHcBaN2V3Uuz1PaMvCA9d67+9rK1zzJCNw8zYLUmq4Q/hnhKbpXtmfGsEnprKNDM3Tvgy+xWmBlNmmyPtCMCXObXXjL/yFiKKbuRLZ+OAXdsYT1cilC2wopOFmp2iyBPI5S862Bq5UNkvHy/MzR/ngqwvxMv0jl2+Q/87SF71HVW44CD7tXiZLgNYOE0fiO89wKFnlMQReVTsR8pTZ1jFbLgwDLO/L4l3OeMk2KurUCnps9yF21sEyba/RRiJrTepE97439zvf64LwmTJPN9NPxNtKeUmYvKCW0h3LVY1cbdV3X2ger5FlnziyDhAtsffsDQcK01DhhXdgepD4TvtM+6DGNwnLj7vHDFyoQOq6kf5LViC7RgC/9poagY30DRHFlBLzRlsAjOiahXBiORaizNJzbDEZYYrfWORcHLKMDSXO/aSqPU2WhoJMXKqOrvtdH8GhmUYdR6SzAGr6ZfZ28nq+M7hBwBsosm7ybag9SY7t+Il/1QhKCYNzBTYg/33WHnUhC/DSpuhEfjKkJIn8tromHHZD3PpamnxDTxZXtRPimY3ar+xQrAWoCybkvk542jdeV5WlReZR/JXujXpb9TRLdheQF38EqtLiqBCSwDTccLwwjZfmyrOgSiZJ/lGce2cY=
